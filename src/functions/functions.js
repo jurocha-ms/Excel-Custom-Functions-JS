@@ -88,3 +88,36 @@ async function getStarCount(userName, repoName) {
     return error;
   }
 }
+
+/**
+ * Gets member groups.
+ * @customfunction
+ * @return {string} number of stars given to a Github repository.
+ */
+async function getMemberGroups() {
+  var result = "WAITING";
+  try {
+    let response = await new Promise((resolve) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "https://graph.microsoft.com/v1.0/me/getMemberGroups", true);
+
+      xhr.setRequestHeader("authorization", "Bearer xyz");
+      xhr.setRequestHeader("content-type", "application/json");
+
+      xhr.onerror = () => {
+        resolve(undefined);
+      };
+
+      xhr.send();
+      // xhr.send("foo=bar&lorem=ipsum");
+      // xhr.send(new Int8Array());
+      // xhr.send(document);
+    });
+
+    result = response.statusText;
+
+    return result;
+  } catch (error) {
+    return error;
+  }
+}
