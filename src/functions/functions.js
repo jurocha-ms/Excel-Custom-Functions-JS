@@ -104,8 +104,12 @@ async function getMemberGroups() {
       xhr.setRequestHeader("authorization", "Bearer xyz");
       xhr.setRequestHeader("content-type", "application/json");
 
+      xhr.onload = (e) => {
+        resolve(xhr.response);
+      };
       xhr.onerror = () => {
         resolve(undefined);
+        result = "[FAIL]";
       };
 
       xhr.send();
