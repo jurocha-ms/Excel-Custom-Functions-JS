@@ -92,15 +92,17 @@ async function getStarCount(userName, repoName) {
 /**
  * @customfunction
  */
-async function aaagm() {
+async function aamsGraph() {
   var result = "[NONE]";
   const xhrResult = await new Promise((resolve) => {
     try {
       const xhr = new XMLHttpRequest();
 
+      //xhr.open("GET", "https://graph.microsoft.com/v1.0/me", true);
       xhr.open("POST", "https://graph.microsoft.com/v1.0/me/getMemberGroups", true);
 
-      xhr.setRequestHeader("authorization", `Bearer bearerToken`);
+      const bearerToken = "Obtain at https://aka.ms/ge";
+      xhr.setRequestHeader("authorization", `Bearer ${bearerToken}`);
       xhr.setRequestHeader("content-type", "application/json");
 
       xhr.onload = () => {
@@ -117,6 +119,7 @@ async function aaagm() {
       });
 
       xhr.send(body);
+      //xhr.send();
     } catch (error) {
       resolve(undefined);
       result = "[EXCEPT]";
