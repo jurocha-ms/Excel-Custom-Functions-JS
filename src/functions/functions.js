@@ -90,44 +90,42 @@ async function getStarCount(userName, repoName) {
 }
 
 /**
- * Gets member groups.
  * @customfunction
- * @return {string} number of stars given to a Github repository.
  */
-async function aagetMemberGroups(method = 1) {
+async function aaagm() {
   var result = "[NONE]";
-  try {
-    await new Promise((resolve) => {
+  const xhrResult = await new Promise((resolve) => {
+    try {
       const xhr = new XMLHttpRequest();
 
-      if (0 === method) {
-        xhr.open("GET", "https://raw.githubusercontent.com/microsoft/v8-jsi/master/config.json", true);
-      } else {
-        xhr.open("POST", "https://graph.microsoft.com/v1.0/me/getMemberGroups", true);
+      xhr.open("POST", "https://graph.microsoft.com/v1.0/me/getMemberGroups", true);
 
-        xhr.setRequestHeader("authorization", "Bearer xyz");
-        xhr.setRequestHeader("content-type", "application/json");
-      }
+      xhr.setRequestHeader("authorization", `Bearer bearerToken`);
+      xhr.setRequestHeader("content-type", "application/json");
 
-      xhr.onload = (e) => {
-        resolve(xhr.response);
-        result = "[LOAD] " + e.currentTarget.responseText;
+      xhr.onload = () => {
+        resolve(xhr.responseText);
+        result = xhr.responseText;
       };
-      xhr.onerror = (e) => {
+      xhr.onerror = () => {
         resolve(undefined);
-        result = "[ERR] " + e.currentTarget.responseText;
+        result = "[ERR] " + xhr.responseText;
       };
 
-      xhr.send();
-      // xhr.send("foo=bar&lorem=ipsum");
-      // xhr.send(new Int8Array());
-      // xhr.send(document);
-    });
+      const body = JSON.stringify({
+        securityEnabledOnly: false,
+      });
 
-    //result = response;
+      xhr.send(body);
+    } catch (error) {
+      resolve(undefined);
+      result = "[EXCEPT]";
+    }
+  });
 
-    return result;
-  } catch (error) {
-    return error;
+  if (xhrResult === undefined) {
+    result = "[UNDEFINED] " + result;
   }
+
+  return result;
 }
